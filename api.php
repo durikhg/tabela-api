@@ -2,32 +2,44 @@
 header("Content-Type: application/json; charset=utf-8");
 header("Access-Control-Allow-Origin: *");
 
-$host = "ep-rapid-dawn-xxxxx.us-east-2.aws.neon.tech"; // coloque o host do Neon
+// 🔹 Configuração Neon Pooler
+$host = "ep-rapid-dawn-adacfum3-pooler.c-2.us-east-1.aws.neon.tech"; 
 $dbname = "neondb";
 $user = "neondb_owner";
-$password = "sua_senha_aqui";
+$password = "npg_ILpkD1QYf3AU"; 
 
 try {
-    $pdo = new PDO("pgsql:host=$host;dbname=$dbname;sslmode=require", $user, $password);
+    $pdo = new PDO(
+        "pgsql:host=$host;dbname=$dbname;sslmode=require",
+        $user,
+        $password,
+        [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
+    );
 } catch (PDOException $e) {
-    echo json_encode(["erro" => $e->getMessage()]);
+    echo json_encode(["erro" => "Erro de conexão: " . $e->getMessage()]);
     exit;
 }
 
+// 🔹 Recebe símbolo do elemento
 $simbolo = $_GET['simbolo'] ?? '';
 if (!$simbolo) {
     echo json_encode(["erro" => "Símbolo não informado"]);
     exit;
 }
 
-$stmt = $pdo->prepare("SELECT * FROM elementos WHERE simbolo = :simbolo");
-$stmt->bindParam(':simbolo', $simbolo);
-$stmt->execute();
+// 🔹 Busca elemento na tabela
+try {
+    $stmt = $pdo->prepare("SELECT * FROM elementos WHERE simbolo = :simbolo");
+    $stmt->bindParam(':simbolo', $simbolo);
+    $stmt->execute();
 
-$elemento = $stmt->fetch(PDO::FETCH_ASSOC);
+    $elemento = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if ($elemento) {
-    echo json_encode($elemento, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
-} else {
-    echo json_encode(["erro" => "Elemento não encontrado"]);
+    if ($elemento) {
+        echo json_encode($elemento, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+    } else {
+        echo json_encode(["erro" => "Elemento não encontrado"]);
+    }
+} catch (PDOException $e) {
+    echo json_encode(["erro" => "Erro na consulta: " . $e->getMessage()]);
 }
