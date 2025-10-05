@@ -1,15 +1,17 @@
 # Usa PHP oficial
 FROM php:8.2-cli
 
-# Copia os arquivos
+# Instala dependências do sistema e PostgreSQL dev
+RUN apt-get update && \
+    apt-get install -y libpq-dev && \
+    docker-php-ext-install pdo_pgsql
+
+# Copia os arquivos da API
 COPY . /app
 WORKDIR /app
-
-# Instala extensão para PostgreSQL
-RUN docker-php-ext-install pdo_pgsql
 
 # Expõe porta
 EXPOSE 10000
 
-# Inicia servidor PHP
+# Inicia o servidor PHP
 CMD ["php", "-S", "0.0.0.0:10000", "api.php"]
