@@ -1,0 +1,5 @@
+{
+  "name": "tabela/api",
+  "description": "API da Tabela Periódica conectada ao Neon",
+  "require": {}
+}
