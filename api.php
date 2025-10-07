@@ -21,16 +21,16 @@ try {
 }
 
 // 🔹 Recebe símbolo do elemento
-$simbolo = $_GET['simbolo'] ?? '';
-if (!$simbolo) {
+$numero = $_GET['numero'] ?? '';
+if (!$numero) {
     echo json_encode(["erro" => "Símbolo não informado"]);
     exit;
 }
 
 // 🔹 Busca elemento na tabela
 try {
-    $stmt = $pdo->prepare("SELECT * FROM elementos WHERE simbolo = :simbolo");
-    $stmt->bindParam(':simbolo', $simbolo);
+    $stmt = $pdo->prepare("SELECT * FROM elementos WHERE numero = :numero");
+    $stmt->bindParam(':numero', $numero);
     $stmt->execute();
 
     $elemento = $stmt->fetch(PDO::FETCH_ASSOC);
