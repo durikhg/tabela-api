@@ -20,7 +20,7 @@ try {
     exit;
 }
 
-// 🔹 Recebe símbolo do elemento
+// 🔹 Recebe o numero do elemento
 $numero = $_GET['numero'] ?? '';
 if (!$numero) {
     echo json_encode(["erro" => "Símbolo não informado"]);
