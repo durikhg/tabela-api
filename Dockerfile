@@ -13,5 +13,5 @@ WORKDIR /app
 # Expõe porta
 EXPOSE 10000
 
-# Inicia o servidor PHP
-CMD ["php", "-S", "0.0.0.0:10000", "api.php"]
+# Inicia o servidor PHP servindo todos os arquivos
+CMD ["php", "-S", "0.0.0.0:10000"]
